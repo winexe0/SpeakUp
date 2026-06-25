@@ -24,9 +24,13 @@ export default function QuizCard({ profile, onRestartProfile }) {
     startQuestion();
   }, []);
 
+  const previousAnswerRef = useRef('');
+
   useEffect(() => {
-    if (isListening && transcript) {
-      setUserAnswer(transcript);
+    if (isListening) {
+      // Append transcript to whatever was already typed
+      const baseText = previousAnswerRef.current ? previousAnswerRef.current + ' ' : '';
+      setUserAnswer(baseText + transcript);
     }
   }, [transcript, isListening]);
 
@@ -187,7 +191,14 @@ export default function QuizCard({ profile, onRestartProfile }) {
         {gameState === 'playing' && (
           <>
             <button 
-              onClick={isListening ? stopListening : startListening}
+              onClick={() => {
+                if (isListening) {
+                  stopListening();
+                } else {
+                  previousAnswerRef.current = userAnswer;
+                  startListening();
+                }
+              }}
               style={{ backgroundColor: isListening ? '#f05064' : 'var(--accent-color)' }}
             >
               {isListening ? '🛑 Stop Recording' : '🎙 Speak Answer'}
