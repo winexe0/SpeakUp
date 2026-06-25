@@ -54,11 +54,13 @@ export default function Setup({ onComplete }) {
         <div className="form-group">
           <label>Age:</label>
           <input
-            type="text"
+            type="number"
             name="age"
             value={profile.age}
             onChange={handleChange}
             placeholder="Your age"
+            min="1"
+            max="120"
             required
           />
         </div>
