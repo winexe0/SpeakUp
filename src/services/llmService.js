@@ -25,8 +25,7 @@ Your response MUST ALWAYS start with either the exact word 'Correct' or the exac
     const response = await fetch("/api/nvidia/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer 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`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
