@@ -190,7 +190,15 @@ export default function QuizCard({ profile, onRestartProfile }) {
 
       {(gameState === 'evaluating' || gameState === 'feedback') && (
         <div className="feedback-box">
-          {formattedFeedback()}
+          {gameState === 'evaluating' && feedback === 'Feedback:\n' ? (
+            <div className="loading-dots">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          ) : (
+            formattedFeedback()
+          )}
         </div>
       )}
 
