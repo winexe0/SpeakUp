@@ -1,0 +1,22 @@
+export const OpenEndedQuestions = [
+    "You are in a group conversation and someone changes the topic suddenly. How do you decide if you want to join the new topic or not?",
+    "You meet someone for the first time. What kinds of questions can you ask to learn more about them without making them uncomfortable?",
+    "A friend is upset and not talking much. How might you show support without using words?",
+    "You are invited to a party where you know only one person. How would you approach meeting new people there?",
+    "Someone gives you a compliment on your work. How do you respond?",
+    "You are working in a group and someone takes credit for your idea. What would you do?",
+    "You are in a noisy room and find it hard to focus on what your friend is saying. How would you handle this situation?",
+    "You want to join a game others are playing. What steps could you take to join in politely?",
+    "A classmate is talking to you, but you don't understand their joke. What could you say or do?",
+    "You are talking to someone and they keep checking their phone. How might you respond?",
+    "You have an idea in a group discussion but the group is moving quickly. How do you share your idea?",
+    "You're with friends and two of them start arguing. How would you react?",
+    "Someone invites you to try a new food you've never eaten before. What do you do?",
+    "You want to leave a conversation politely. What could you say?",
+    "You are in a group where two people are speaking at the same time. How do you decide who to listen to?",
+    "You accidentally interrupt someone while they're speaking. How do you fix the situation?",
+    "Someone says something you strongly disagree with. How do you respond respectfully?",
+    "You're at a store and need help finding something. How do you ask an employee?",
+    "You are late to meet someone. How do you explain it to them?",
+    "You want to make a new friend but don't know what to talk about. How do you start?"
+];

@@ -1,0 +1,105 @@
+import React, { useState, useEffect } from 'react';
+
+export default function Setup({ onComplete }) {
+  const [profile, setProfile] = useState({
+    name: '',
+    age: '',
+    likes: '',
+    strengths: '',
+    improve: ''
+  });
+
+  useEffect(() => {
+    const savedProfile = localStorage.getItem('speakup_profile');
+    if (savedProfile) {
+      try {
+        setProfile(JSON.parse(savedProfile));
+      } catch (e) {
+        console.error("Could not parse saved profile", e);
+      }
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem('speakup_profile', JSON.stringify(profile));
+    onComplete(profile);
+  };
+
+  return (
+    <div className="card">
+      <h1 className="header-title">🌟 Welcome to SpeakUp!</h1>
+      <p style={{ textAlign: 'center', marginBottom: '20px' }}>
+        Before we start, let's set up your profile so we can personalize your experience.
+      </p>
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <div className="form-group">
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={profile.name}
+            onChange={handleChange}
+            placeholder="Your name"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Age:</label>
+          <input
+            type="text"
+            name="age"
+            value={profile.age}
+            onChange={handleChange}
+            placeholder="Your age"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>What do you like to do? (Likes)</label>
+          <textarea
+            name="likes"
+            value={profile.likes}
+            onChange={handleChange}
+            placeholder="Example: I like playing Minecraft, reading about dinosaurs, and drawing."
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Your strengths:</label>
+          <textarea
+            name="strengths"
+            value={profile.strengths}
+            onChange={handleChange}
+            placeholder="Example: I am very honest, I know a lot about trains, and I am good at solving puzzles."
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Things to improve on:</label>
+          <textarea
+            name="improve"
+            value={profile.improve}
+            onChange={handleChange}
+            placeholder="Example: I want to get better at looking at people when they talk and not interrupting."
+            required
+          />
+        </div>
+
+        <div className="button-group">
+          <button type="submit">💾 Save & Continue</button>
+        </div>
+      </form>
+    </div>
+  );
+}
