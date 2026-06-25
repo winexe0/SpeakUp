@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 export function useSpeech() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
+  const [speechError, setSpeechError] = useState('');
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export function useSpeech() {
 
       recognition.onerror = (event) => {
         console.error("Speech recognition error", event.error);
+        setSpeechError(event.error);
         setIsListening(false);
       };
 
@@ -77,6 +79,8 @@ export function useSpeech() {
     isListening,
     transcript,
     setTranscript,
+    speechError,
+    setSpeechError,
     startListening,
     stopListening,
     speakText,

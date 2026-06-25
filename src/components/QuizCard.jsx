@@ -14,8 +14,15 @@ export default function QuizCard({ profile, onRestartProfile }) {
   const [feedback, setFeedback] = useState('');
   const [isReading, setIsReading] = useState(false);
   
-  const { isListening, transcript, setTranscript, startListening, stopListening, speakText, stopSpeaking } = useSpeech();
+  const { isListening, transcript, setTranscript, speechError, setSpeechError, startListening, stopListening, speakText, stopSpeaking } = useSpeech();
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (speechError) {
+      alert(`Speech recognition failed: ${speechError}. Your browser might require HTTPS or have blocked the microphone.`);
+      setSpeechError(''); // Clear error after showing
+    }
+  }, [speechError, setSpeechError]);
 
   useEffect(() => {
     // Select 5 random questions
