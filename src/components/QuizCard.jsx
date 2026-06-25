@@ -50,6 +50,13 @@ export default function QuizCard({ profile, onRestartProfile }) {
     return () => clearTimeout(timerRef.current);
   }, [timeLeft, gameState]);
 
+  useEffect(() => {
+    if (questions.length > 0 && gameState === 'playing') {
+      speakText(questions[currentIndex]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, questions, gameState]);
+
   const startQuestion = () => {
     setTimeLeft(60);
     setUserAnswer('');
