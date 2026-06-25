@@ -177,7 +177,7 @@ export default function QuizCard({ profile, onRestartProfile }) {
       )}
 
       <div className="question-text">
-        Question {currentIndex + 1}: {questions[currentIndex]}
+        Question {currentIndex + 1} of {questions.length}: {questions[currentIndex]}
       </div>
 
       {(gameState === 'playing' || gameState === 'evaluating') && (
