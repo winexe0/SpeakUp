@@ -1,5 +1,5 @@
 # Stage 1: Build the React application using Vite
-FROM node:18-alpine as build
+FROM node:24-alpine as build
 WORKDIR /app
 
 # Install dependencies
