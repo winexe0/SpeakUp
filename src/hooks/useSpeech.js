@@ -1,13 +1,32 @@
 import { useState, useEffect, useRef } from 'react';
 
+let globalAudio = null;
+
 export function useSpeech() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [speechError, setSpeechError] = useState('');
   const recognitionRef = useRef(null);
-  const audioRef = useRef(null);
 
   useEffect(() => {
+    if (!globalAudio) {
+      globalAudio = new Audio();
+      const unlock = () => {
+        if (globalAudio.src === '') {
+          // Play a tiny silent wav to unlock the audio context
+          globalAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+          globalAudio.play().then(() => {
+            globalAudio.pause();
+            globalAudio.currentTime = 0;
+          }).catch(() => {});
+        }
+        window.removeEventListener('click', unlock);
+        window.removeEventListener('touchstart', unlock);
+      };
+      window.addEventListener('click', unlock);
+      window.addEventListener('touchstart', unlock);
+    }
+    
     // Setup Speech Recognition
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -87,24 +106,22 @@ export function useSpeech() {
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       
-      const audio = new Audio(url);
-      audioRef.current = audio;
-      audio.play();
-
-      audio.onended = () => {
-        URL.revokeObjectURL(url);
-        audioRef.current = null;
-      };
+      if (globalAudio) {
+        globalAudio.src = url;
+        globalAudio.play().catch(err => console.error("Autoplay prevented:", err));
+        globalAudio.onended = () => {
+          URL.revokeObjectURL(url);
+        };
+      }
     } catch (err) {
       console.error("Error in speech synthesis API", err);
     }
   };
 
   const stopSpeaking = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
+    if (globalAudio) {
+      globalAudio.pause();
+      globalAudio.currentTime = 0;
     }
   };
 
