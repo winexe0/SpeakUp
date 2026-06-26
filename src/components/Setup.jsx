@@ -10,7 +10,7 @@ export default function Setup({ onComplete }) {
   });
 
   useEffect(() => {
-    const savedProfile = localStorage.getItem('speakup_profile');
+    const savedProfile = localStorage.getItem('onthespot_profile');
     if (savedProfile) {
       try {
         setProfile(JSON.parse(savedProfile));
@@ -27,15 +27,18 @@ export default function Setup({ onComplete }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('speakup_profile', JSON.stringify(profile));
+    localStorage.setItem('onthespot_profile', JSON.stringify(profile));
     onComplete(profile);
   };
 
   return (
     <div className="card">
-      <h1 className="header-title">🌟 Welcome to SpeakUp!</h1>
-      <p style={{ textAlign: 'center', marginBottom: '20px' }}>
-        Before we start, let's set up your profile so we can personalize your experience.
+      <h1 className="header-title">🌟 Welcome to OnTheSpot!</h1>
+      <p style={{ textAlign: 'center', lineHeight: '1.6', marginBottom: '5px' }}>
+        <strong>OnTheSpot</strong> is an interactive quiz that helps you practice responding to real-world social situations — on the spot! You'll be given a scenario and have <strong>60 seconds</strong> to think of and share your response, either by typing or speaking out loud. An AI coach will then give you personalized, supportive feedback on how you did.
+      </p>
+      <p style={{ textAlign: 'center', marginBottom: '20px', color: '#788c82', fontSize: '0.95rem' }}>
+        To get started, fill out your profile below so we can tailor the feedback to you.
       </p>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
