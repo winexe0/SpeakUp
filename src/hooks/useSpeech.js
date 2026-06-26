@@ -5,6 +5,7 @@ export function useSpeech() {
   const [transcript, setTranscript] = useState('');
   const [speechError, setSpeechError] = useState('');
   const recognitionRef = useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     // Setup Speech Recognition
@@ -60,18 +61,50 @@ export function useSpeech() {
     }
   };
 
-  const speakText = (text) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel(); // Stop any ongoing speech
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.0;
-      window.speechSynthesis.speak(utterance);
+  const speakText = async (text) => {
+    stopSpeaking();
+    
+    if (!text || text.trim() === '') return;
+
+    try {
+      const formData = new FormData();
+      formData.append('text', text);
+      formData.append('language', 'en-US');
+      formData.append('voice', 'Magpie-Multilingual.EN-US.Aria');
+      formData.append('encoding', 'LINEAR_PCM');
+      formData.append('sample_rate_hz', '44100');
+
+      const response = await fetch('/api/nvidia-tts/v1/audio/synthesize', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        console.error("Failed to generate speech", response.status, response.statusText);
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.play();
+
+      audio.onended = () => {
+        URL.revokeObjectURL(url);
+        audioRef.current = null;
+      };
+    } catch (err) {
+      console.error("Error in speech synthesis API", err);
     }
   };
 
   const stopSpeaking = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
     }
   };
 
