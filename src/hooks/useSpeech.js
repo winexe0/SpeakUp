@@ -74,7 +74,7 @@ export function useSpeech() {
       formData.append('encoding', 'LINEAR_PCM');
       formData.append('sample_rate_hz', '44100');
 
-      const response = await fetch('/api/nvidia-tts/v1/audio/synthesize', {
+      const response = await fetch('/api/tts/v1/audio/synthesize', {
         method: 'POST',
         body: formData
       });
