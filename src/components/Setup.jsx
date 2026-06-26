@@ -1,5 +1,55 @@
 import React, { useState, useEffect } from 'react';
 
+const SUGGESTION_OPTIONS = {
+  likes: [
+    "Playing video games", "Reading books", "Drawing or Art",
+    "Playing sports", "Listening to music", "Watching movies or TV",
+    "Building things (LEGOs)", "Spending time with animals"
+  ],
+  strengths: [
+    "Being a good friend", "Honesty", "Remembering facts",
+    "Following rules", "Creativity", "Problem-solving",
+    "Kindness", "Math or Science"
+  ],
+  improve: [
+    "Starting conversations", "Looking at people when talking",
+    "Sharing things", "Handling frustration", "Taking turns",
+    "Listening without interrupting", "Making new friends"
+  ]
+};
+
+function ChipSelector({ options, value, onChange }) {
+  const selectedItems = value ? value.split(', ').map(s => s.trim()).filter(Boolean) : [];
+
+  const toggleChip = (option) => {
+    if (selectedItems.includes(option)) {
+      const updated = selectedItems.filter(item => item !== option);
+      onChange(updated.join(', '));
+    } else {
+      const updated = [...selectedItems, option];
+      onChange(updated.join(', '));
+    }
+  };
+
+  return (
+    <div className="chip-container">
+      {options.map((option) => {
+        const isSelected = selectedItems.includes(option);
+        return (
+          <button
+            key={option}
+            type="button"
+            className={`chip ${isSelected ? 'chip-selected' : ''}`}
+            onClick={() => toggleChip(option)}
+          >
+            {isSelected ? '✓ ' : '+ '}{option}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Setup({ onComplete }) {
   const [profile, setProfile] = useState({
     name: '',
@@ -23,6 +73,10 @@ export default function Setup({ onComplete }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleChipChange = (field, value) => {
+    setProfile(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -70,6 +124,12 @@ export default function Setup({ onComplete }) {
 
         <div className="form-group">
           <label>What do you like to do? (Likes)</label>
+          <p className="chip-hint">Tap any that apply, or type your own below:</p>
+          <ChipSelector
+            options={SUGGESTION_OPTIONS.likes}
+            value={profile.likes}
+            onChange={(val) => handleChipChange('likes', val)}
+          />
           <textarea
             name="likes"
             value={profile.likes}
@@ -81,6 +141,12 @@ export default function Setup({ onComplete }) {
 
         <div className="form-group">
           <label>Your strengths:</label>
+          <p className="chip-hint">Tap any that apply, or type your own below:</p>
+          <ChipSelector
+            options={SUGGESTION_OPTIONS.strengths}
+            value={profile.strengths}
+            onChange={(val) => handleChipChange('strengths', val)}
+          />
           <textarea
             name="strengths"
             value={profile.strengths}
@@ -92,6 +158,12 @@ export default function Setup({ onComplete }) {
 
         <div className="form-group">
           <label>Things to improve on:</label>
+          <p className="chip-hint">Tap any that apply, or type your own below:</p>
+          <ChipSelector
+            options={SUGGESTION_OPTIONS.improve}
+            value={profile.improve}
+            onChange={(val) => handleChipChange('improve', val)}
+          />
           <textarea
             name="improve"
             value={profile.improve}
